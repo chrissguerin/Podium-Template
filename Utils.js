@@ -2,28 +2,26 @@
  * Fichiers contenant une multitude de fonctions utilitaires pour le reste des fonctions.
  */
 
-function getRangeMeso1(sheet) {
-  return sheet.getRange("AG23:EO160");
+function test() {
+  console.log("fonctionne")
 }
 
-function getMeso(sheet, weekNo) {
-  var meso_Weeks_range = sheet.getRange("AB23");
-  var meso_Weeks = meso_Weeks_range.getValue();
-  var mesoSpacing = 138;
-  var currentMeso = 1;
+function getRangeExercises(sheet) {
 
-  while (weekNo > meso_Weeks) {
-    meso_Weeks += meso_Weeks_range.offset(mesoSpacing, 0).getValue();
-    currentMeso++;
-  }
-
-  return currentMeso;
 }
 
-function getMesoRange(meso, sheet) {
-  var mesoSpacing = 138;
-  var rangeMeso1 = getRangeMeso1(sheet);
-  return rangeMeso1.offset(mesoSpacing * (meso - 1), 0);
+function getRangeLoadData(sheet) {
+
+}
+
+function getCurrentMacro(date) {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("COACH DASHBOARD");
+
+  var cellDate = findCellMonth(date, sheet);
+  try {
+    var macro = sheet.getRange(21, cellDate.getColumn()).getMergedRanges()[0].getValue()
+    return macro;
+  } catch (e) {throw new Error("Pas de macro pour la date.")}
 }
 
 function hexToRgb(hex) {
