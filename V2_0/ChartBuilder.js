@@ -1,28 +1,24 @@
-function copyData() {
+function updateCharts() {
   var date = new Date();
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(getCurrentMacro(date));
   var liftGroupArrays = ["sq", "bn", "dl"];
-  var liftArrays = ["Comp Squat", "Comp Bench", "Comp Deadlift", "Comp Dead", "Comp bench", "Comp squat", "Comp deadlift", "Comp dead"];
 
   var sqRange = sheet.getRange(28, 8, 2, 18);
   var bnRange = sheet.getRange(32, 8, 2, 18);
   var dlRange = sheet.getRange(36, 8, 2, 18);
   var volRange = sheet.getRange(44, 8, 2, 18);
 
-  var firstColumn = "AV";
+  var firstColumn = "AX";
   var spacing = 19;
-  var spacing_meso = 138; 
 
   var firstColumnIndex = sheet.getRange(firstColumn + "1").getColumn();
 
-  var meso = getMeso(sheet, getCurrentWeekNo(date));
-  var mesoRange = getMesoRange(meso, sheet);
-  var weeksInMeso = sheet.getRange("AB" + (23 + (spacing_meso * (meso - 1)))).getValue();
+  var weeksInMeso = sheet.getRange("AL21").getValue();
 
-  for (var columnIndex = firstColumnIndex, j = 0; j < weeksInMeso; columnIndex += spacing, j++) {
-    var intentionRange = sheet.getRange(mesoRange.getRow(), columnIndex - 14, 138, 1);
+  for (var columnIndex = firstColumnIndex, j = 0; j < weeksInMeso; columnIndex += spacing, j++) { //TODO modifier la logique de la loop?
+    var intentionRange = sheet.getRange("AJ27:AJ200");
 
-    var weeklyVolume = getVolumeTotal(sheet, mesoRange, columnIndex);
+    var weeklyVolume = getVolumeTotal(sheet, mesoRange, columnIndex); //TODO modifier
 
     var results = intentionRange.createTextFinder("main").findAll();
 
@@ -36,35 +32,23 @@ function copyData() {
       var liftGroupRange = sheet.getRange(rowIndex, columnIndex - 15);
       var liftGroupValue = liftGroupRange.getValue();
 
-      var liftRange = sheet.getRange(rowIndex, columnIndex - 12);
-      var liftValue = liftRange.getValue();
-
       var week = sheet.getRange(21, columnIndex - 11).getValue();
       var weekNo = parseInt(week.toString().charAt(week.toString().length - 1));
-
-      var counter = 1;
-      while (counter < meso){
-        var weeksInMeso_previous = sheet.getRange("AB" + (23 + (spacing_meso * (counter - 1)))).getValue();
-        weekNo += parseInt(weeksInMeso_previous);
-        counter++;
-      }
 
       week = "WEEK " + weekNo;
 
       if (value != null) {
         if (!isNaN(value)) {
           if (liftGroupArrays.includes(liftGroupValue)) {
-            if (liftArrays.includes(liftValue)) {
-              if (liftGroupValue == "sq") {
-                var weekRange = findWeekRange(sqRange, week);
-                sheet.getRange(weekRange.getRow() ,weekRange.getColumn()).setValue(value);
-              } else if (liftGroupValue == "bn") {
-                var weekRange = findWeekRange(bnRange, week);
-                sheet.getRange(weekRange.getRow() ,weekRange.getColumn()).setValue(value);
-              } else if (liftGroupValue == "dl") {
-                var weekRange = findWeekRange(dlRange, week);
-                sheet.getRange(weekRange.getRow() ,weekRange.getColumn()).setValue(value);
-              }
+            if (liftGroupValue == "sq") {
+              var weekRange = findWeekRange(sqRange, week);
+              sheet.getRange(weekRange.getRow(), weekRange.getColumn()).setValue(value);
+            } else if (liftGroupValue == "bn") {
+              var weekRange = findWeekRange(bnRange, week);
+              sheet.getRange(weekRange.getRow(), weekRange.getColumn()).setValue(value);
+            } else if (liftGroupValue == "dl") {
+              var weekRange = findWeekRange(dlRange, week);
+              sheet.getRange(weekRange.getRow(), weekRange.getColumn()).setValue(value);
             }
           }
         }

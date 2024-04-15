@@ -2,6 +2,38 @@
  * Permet d'upload les données de compétion dans le spreadsheet
  */
 
+function uploadMeetData(){
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("COACH DASHBOARD");
+  var data = filterCSVData(Utilities.parseCsv(getCsvData()));
+
+  var colorOne = "#cfe2f3";
+  var colorTwo = "#9fc5e8";
+  var white = "#ffffff";
+  var black = "#000000";
+
+  for (var i = 0; i < data.length; i++){
+    var row = 33 + i;
+    sheet.getRange("H" + row).setValue(data[i][0]);
+    sheet.getRange("I" + row + ":M" + row).merge().setValue(data[i][1]);
+    sheet.getRange("N" + row + ":P" + row).merge().setValue(data[i][2]);
+    sheet.getRange("Q" + row + ":S" + row).merge().setValue(data[i][3]);
+    sheet.getRange("T" + row + ":W" + row).merge().setValue(data[i][4]);
+    sheet.getRange("X" + row + ":AA" + row).merge().setValue(data[i][5]);
+    sheet.getRange("AB" + row + ":AE" + row).merge().setValue(data[i][6]);
+    sheet.getRange("AF" + row + ":AI" + row).merge().setValue(data[i][7]);
+    sheet.getRange("AJ" + row + ":AK" + row).merge().setValue(data[i][8]);
+    
+    if (i % 2 == 0){
+      sheet.getRange("H" + row + ":" + "AK" + row).setBackground(colorOne);
+    } else {
+      sheet.getRange("H" + row + ":" + "AK" + row).setBackground(colorTwo);
+    }
+
+    var range = sheet.getRange("H33:AK" + row);
+    range.setBorder(true, true, true, true, true, true, white, SpreadsheetApp.BorderStyle.SOLID).setBorder(true, true, true, true, null, null, black, SpreadsheetApp.BorderStyle.SOLID_THICK).setFontFamily("Rajdhani").setHorizontalAlignment("center").setFontSize(10);
+  }
+}
+
 function getCsvData() {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("COACH DASHBOARD");
   var lifterName = removeAccents(sheet.getRange("Q9").getMergedRanges()[0].getValue().toString().toLowerCase().replace(" ", "").replace("-", ""));
@@ -105,36 +137,4 @@ function filterCSVData(csvData) {
   }
   
   return filteredData;
-}
-
-function uploadMeetData(){
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("COACH DASHBOARD");
-  var data = filterCSVData(Utilities.parseCsv(getCsvData()));
-
-  var colorOne = "#cfe2f3";
-  var colorTwo = "#9fc5e8";
-  var white = "#ffffff";
-  var black = "#000000";
-
-  for (var i = 0; i < data.length; i++){
-    var row = 33 + i;
-    sheet.getRange("H" + row).setValue(data[i][0]);
-    sheet.getRange("I" + row + ":M" + row).merge().setValue(data[i][1]);
-    sheet.getRange("N" + row + ":P" + row).merge().setValue(data[i][2]);
-    sheet.getRange("Q" + row + ":S" + row).merge().setValue(data[i][3]);
-    sheet.getRange("T" + row + ":W" + row).merge().setValue(data[i][4]);
-    sheet.getRange("X" + row + ":AA" + row).merge().setValue(data[i][5]);
-    sheet.getRange("AB" + row + ":AE" + row).merge().setValue(data[i][6]);
-    sheet.getRange("AF" + row + ":AI" + row).merge().setValue(data[i][7]);
-    sheet.getRange("AJ" + row + ":AK" + row).merge().setValue(data[i][8]);
-    
-    if (i % 2 == 0){
-      sheet.getRange("H" + row + ":" + "AK" + row).setBackground(colorOne);
-    } else {
-      sheet.getRange("H" + row + ":" + "AK" + row).setBackground(colorTwo);
-    }
-
-    var range = sheet.getRange("H33:AK" + row);
-    range.setBorder(true, true, true, true, true, true, white, SpreadsheetApp.BorderStyle.SOLID).setBorder(true, true, true, true, null, null, black, SpreadsheetApp.BorderStyle.SOLID_THICK).setFontFamily("Rajdhani").setHorizontalAlignment("center").setFontSize(10);
-  }
 }
