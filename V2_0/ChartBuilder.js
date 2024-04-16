@@ -18,7 +18,7 @@ function updateCharts(dateParam) {
 
   for (var columnIndex = firstColumnIndex, j = 0; j < weeksInMeso; columnIndex += spacing, j++) { //loop pour parcourir toutes les semaines
     var intentionRange = sheet.getRange("AJ27:AJ200");
-    var range = sheet.getRange(columnIndex, 27, columnIndex, 200);
+    var range = sheet.getRange(27, columnIndex, 173, 1);
 
     var weeklyVolume = getVolumeTotal(sheet, range);
 

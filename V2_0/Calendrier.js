@@ -5,6 +5,8 @@
 function updateCalendar(dateParam) {
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("COACH DASHBOARD");
 
+  console.log(dateParam);
+
   const currentDate = dateParam;
   const yesterday = dateParam;
 
@@ -38,10 +40,11 @@ function insertMeetDay() {
 
   for (var i = 0; i < range.getNumRows() - 1; i++) {
     var date = range.getMergedRanges()[i].getValue();
-    var cell = findCellMonth(date, sheet);
 
-    setStyleMeetDay(cell);
-  }
+    if (date != null || date != "")
+      var cell = findCellMonth(date, sheet);
+      setStyleMeetDay(cell);
+    }
 }
 
 function resetMeetDay() {

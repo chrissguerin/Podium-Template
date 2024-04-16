@@ -19,11 +19,14 @@ function insertCouleurDansDash(yesterday) {
   var rangeCompletedOn = sheet.getRange("AP27:AP200"); //range de la premiere semaine
   var rangeCompletedOn_Offset_Weeks = rangeCompletedOn.offset(0, spacing_x * weeks); //change le range pour la bonne semaine
 
+  console.log(rangeCompletedOn_Offset_Weeks.getA1Notation());
+
   var results = rangeCompletedOn_Offset_Weeks.createTextFinder("COMPLETED ON").findAll(); //trouve toutes les cellules avec "completed on" (a la bonne semaine)
 
   for (var i = 0; i < results; i++) { 
     var resultRow = results[i].getRow();
     var rangeCompletedOn_Offset_Days = sheet.getRange(resultRow + 1, rangeCompletedOn_Offset_Weeks.getColumn());
+
 
     if (rangeCompletedOn_Offset_Days.getValue() == dayOfTheWeek) {
       var fatigueRange = sheet.getRange(resultRow + 1, rangeCompletedOn_Offset_Weeks.getColumn() + 2, 1, 9)
