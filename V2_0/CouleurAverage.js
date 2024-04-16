@@ -1,32 +1,34 @@
 function insertCouleurDansDash(yesterday) {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(getCurrentMacro(yesterday));
-  var macroStartingDate = sheet.getRange("AJ23").getValue();
+  var macroStartingDate = sheet.getRange("AL21").getValue();
 
-  var spacing_x = 19;
-  var spacing_y = 23;
-  var spacing_meso = 138;
+  var spacing_x = 14;
 
   var weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
   var dayOfTheWeek = weekdays[yesterday.getDay()];
   var dayBetween = Math.floor((yesterday - macroStartingDate) / (24 * 60 * 60 * 1000));
   var weeks = Math.floor(dayBetween / 7);
-  var meso = getMeso(sheet, getCurrentWeekNo(yesterday));
 
-  for (var i = 1; i < meso; i++) {
-    weeks = weeks - sheet.getRange("AB" + (23 + spacing_meso * (i - 1))).getValue();
-  }
+  //for (var i = 1; i < meso; i++) {
+    //weeks = weeks - sheet.getRange("AB" + (23 + spacing_meso * (i - 1))).getValue();
+  //}
 
-  var mesoRange = getMesoRange(meso, sheet);
-  var completedOnRange = mesoRange.getCell(22, 4);
-  var fatigueRange = sheet.getRange(22 + mesoRange.getRow() - 1, 5 + mesoRange.getColumn() - 1, 1, 10);
+  //var mesoRange = getMesoRange(meso, sheet);
 
-  for (var i = 0; i < 6; i++) {
-    var completedOnRange_offset = completedOnRange.offset(spacing_y * i, spacing_x * weeks);
-    if (completedOnRange_offset.getValue() == dayOfTheWeek) {
-      var fatigueRange_offset = fatigueRange.offset(spacing_y * i, spacing_x * weeks);
+  var rangeCompletedOn = sheet.getRange("AP27:AP200"); //range de la premiere semaine
+  var rangeCompletedOn_Offset_Weeks = rangeCompletedOn.offset(0, spacing_x * weeks); //change le range pour la bonne semaine
 
-      var averageColor = getAverageColor(fatigueRange_offset);
+  var results = rangeCompletedOn_Offset_Weeks.createTextFinder("COMPLETED ON").findAll(); //trouve toutes les cellules avec "completed on" (a la bonne semaine)
+
+  for (var i = 0; i < results; i++) { 
+    var resultRow = results[i].getRow();
+    var rangeCompletedOn_Offset_Days = sheet.getRange(resultRow + 1, rangeCompletedOn_Offset_Weeks.getColumn());
+
+    if (rangeCompletedOn_Offset_Days.getValue() == dayOfTheWeek) {
+      var fatigueRange = sheet.getRange(resultRow + 1, rangeCompletedOn_Offset_Weeks.getColumn() + 2, 1, 9)
+
+      var averageColor = getAverageColor(fatigueRange);
       var cellDate = findCellMonth(yesterday, SpreadsheetApp.getActiveSpreadsheet().getSheetByName("COACH DASHBOARD"));
       cellDate.setBackground(averageColor);
     }
