@@ -1,5 +1,5 @@
-function trigger() {
-    updateCalendar();
-    updateCharts();
-    uploadMeetData();
-}
+// function trigger() {
+//     updateCalendar();
+//     updateCharts();
+//     uploadMeetData();
+// }

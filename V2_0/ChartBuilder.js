@@ -1,5 +1,6 @@
-function updateCharts() {
-  var date = new Date();
+function updateCharts(dateParam) {
+  var date = dateParam;
+  //var date = new Date();
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(getCurrentMacro(date));
   var liftGroupArrays = ["sq", "bn", "dl"];
 

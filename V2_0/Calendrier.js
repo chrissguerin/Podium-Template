@@ -2,11 +2,14 @@
  * Contiens toutes les fonctions reliés au calendrier.
  */
 
-function updateCalendar() {
+function updateCalendar(dateParam) {
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("COACH DASHBOARD");
 
-  const currentDate = new Date();
-  const yesterday = new Date();
+  const currentDate = dateParam;
+  const yesterday = dateParam;
+
+  //const currentDate = new Date();
+  //const yesterday = new Date();
   yesterday.setDate(currentDate.getDate() - 1)
 
   var newDate = findCellMonth(currentDate, sheet);
