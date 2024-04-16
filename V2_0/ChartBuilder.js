@@ -9,20 +9,21 @@ function updateCharts() {
   var volRange = sheet.getRange(44, 8, 2, 18);
 
   var firstColumn = "AX";
-  var spacing = 19;
+  var spacing = 14;
 
   var firstColumnIndex = sheet.getRange(firstColumn + "1").getColumn();
 
   var weeksInMeso = sheet.getRange("AL21").getValue();
 
-  for (var columnIndex = firstColumnIndex, j = 0; j < weeksInMeso; columnIndex += spacing, j++) { //TODO modifier la logique de la loop?
+  for (var columnIndex = firstColumnIndex, j = 0; j < weeksInMeso; columnIndex += spacing, j++) { //loop pour parcourir toutes les semaines
     var intentionRange = sheet.getRange("AJ27:AJ200");
+    var range = sheet.getRange(columnIndex, 27, columnIndex, 200);
 
-    var weeklyVolume = getVolumeTotal(sheet, mesoRange, columnIndex); //TODO modifier
+    var weeklyVolume = getVolumeTotal(sheet, range);
 
     var results = intentionRange.createTextFinder("main").findAll();
 
-    for (var i = 0; i < results.length; i++) {
+    for (var i = 0; i < results.length; i++) { //loop pour parcourir tous les "main" trouve dans AJ
       var result = results[i];
       var rowIndex = result.getRow();
 
@@ -79,17 +80,17 @@ function columnToLetter(column) {
   return letter;
 }
 
-function getVolumeTotal(sheet, mesoRange, columnIndex) {
+function getVolumeTotal(sheet, range) {
   var total = 0;
-  for (var i = 0; i < 6; i++){
-      var range = sheet.getRange(mesoRange.getRow() + 4 + (23 * i), columnIndex + 1, 9, 1);
-      var values = range.getValues();
 
-      for (var j = 0; j < values.length; j++) {
-        for (var k = 0; k < values[j].length; k++) {
-          total += parseFloat(values[j][k]);
+  var values = sheet.getRange(range).getValues();
+  
+  for (var i = 0; i < values.length; i++) {
+    var cellValue = values[i][0];
+    if (!isNaN(cellValue)) { 
+      sum += Number(cellValue);
     }
   }
-  }
+
   return total;
 }
